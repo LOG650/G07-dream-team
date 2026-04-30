@@ -86,10 +86,11 @@ En Random Forest Regressor er trent for å predikere restitusjonstid basert på 
 - **R2:** 0.3356.
 
 ## 7.4 Sanntids Risikointegrasjon (Ny funksjon)
-En av prosjektets mest innovative utvidelser er integrasjonen av **NewsAPI** og **OpenWeatherMap API**. Verktøyet henter nå automatisk sanntidsdata for å identifisere trusler før de påvirker forsyningskjeden:
-- **Global nyhetsovervåking:** Analyserer nyhetsstrømmer for geopolitisk uro, streik og blokkeringer (f.eks. Suez-kanalen).
-- **Meteorologisk overvåking:** Henter faktiske værdata (vindstyrke, ekstremvær) for kritiske logistiske knutepunkter som Panama-kanalen, Shanghai, Rotterdam og Singapore.
-- **Dynamisk respons:** Hvis sanntidsrisikoen øker (f.eks. orkanvarsel eller økt konfliktnivå), vil beslutningsmodellen automatisk prioritere proaktive tiltak som omruting eller flyfrakt.
+En av prosjektets mest innovative utvidelser er integrasjonen av **NewsAPI**, **OpenWeatherMap API**, **AlphaVantage** og **AISStream**. Verktøyet henter nå automatisk sanntidsdata for å identifisere trusler før de påvirker forsyningskjeden:
+- **Global nyhetsovervåking:** Analyserer nyhetsstrømmer for geopolitisk uro, streik og blokkeringer.
+- **Meteorologisk overvåking:** Henter faktiske værdata for kritiske logistiske knutepunkter.
+- **Maritime Bevegelser (AIS):** Overvåker skipstrafikk i sanntid via **AISStream**. Per 30. april 2026 ble det registrert kritisk lav trafikk i Hormuzstredet (0 skip i testvinduet), noe som utløser maksimal risiko for ruter i Midtøsten.
+- **Energi og Råvarer:** Henter sanntids oljepriser (Brent Crude). Den nåværende prisen på **$110.83/fat** har ført til at modellen automatisk legger til et **15% drivstofftillegg** på alle transportberegninger.
 
 # 8.0 Analyse
 ## 8.1 Stresstesting (2.3.2)
@@ -98,10 +99,10 @@ Simulering av en total Suez-blokkering (Risiko = 0.95) viser at andelen ordrer s
 ![Figur 1: Skifte i beslutningsstrategier ved normal drift vs. global Suez-blokkering.](005 report/figures/stress_test_comparison.png)
 
 ## 8.2 Evaluering av Målfunksjon (2.3.3)
-Med sanntidsdata integrert (per 30. april 2026), viser modellen en mer proaktiv tilnærming:
-- **Kostnadsøkning:** 61.09%
-- **Reduksjon i Ledetid:** 12.09%
-- **Efficiency Ratio:** 0.1979
+Med sanntidsdata integrert (per 30. april 2026), inkludert den ekstreme oljeprisen og Hormuz-situasjonen, viser modellen en mer proaktiv, men kostbar tilnærming:
+- **Kostnadsøkning:** 209.64% (drevet av flyfrakt og 15% drivstofftillegg)
+- **Reduksjon i Ledetid:** 12.68%
+- **Efficiency Ratio:** 0.0605
 
 ![Figur 2: Forholdet mellom økte transportkostnader og oppnådd tidsbesparelse.](005 report/figures/cost_leadtime_tradeoff.png)
 

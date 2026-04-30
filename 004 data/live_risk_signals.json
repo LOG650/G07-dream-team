@@ -1,27 +1,28 @@
 {
     "Suez": {
         "score": 0.7,
-        "article_count": 47,
-        "last_updated": "2026-04-30 19:06:54"
+        "article_count": 47
     },
-    "Panama": {
-        "score": 0.4,
-        "article_count": 4,
-        "last_updated": "2026-04-30 19:06:54"
+    "Hormuz": {
+        "score": 0.95,
+        "article_count": 393
     },
     "Cyber": {
-        "score": 0.4,
-        "article_count": 9,
-        "last_updated": "2026-04-30 19:06:54"
+        "score": 0.7,
+        "article_count": 26
     },
     "Geopolitical": {
-        "score": 0.4,
-        "article_count": 5,
-        "last_updated": "2026-04-30 19:06:55"
+        "score": 0.7,
+        "article_count": 38
+    },
+    "Oil_Price": {
+        "score": 0.95,
+        "price": 110.83000183105469
+    },
+    "Hormuz_AIS": {
+        "score": 0.8
     },
     "Weather": {
-        "score": 0.18,
-        "info": "Gjennomsnittlig v\u00e6rrisiko i kritiske havner",
-        "last_updated": "2026-04-30 19:06:55"
+        "score": 0.1
     }
 }
