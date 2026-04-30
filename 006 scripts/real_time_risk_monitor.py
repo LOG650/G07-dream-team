@@ -104,6 +104,16 @@ def get_weather_risk():
     return sum(node_risks.values()) / len(node_risks) if node_risks else 0.1
 
 async def fetch_real_time_risk():
+    # Cooldown-sjekk for å beskytte API-kvoter
+    cache_file = '004 data/live_risk_signals.json'
+    if os.path.exists(cache_file):
+        file_mod_time = datetime.fromtimestamp(os.path.getmtime(cache_file))
+        if datetime.now() - file_mod_time < timedelta(minutes=15):
+            print("ADVARSEL: Skriptet ble kjørt for mindre enn 15 minutter siden.")
+            print("API-kvotene dine (NewsAPI, AlphaVantage osv.) er begrensede.")
+            # Her kan vi legge til en sjekk om brukeren vil tvinge gjennom, 
+            # men i et script kjører vi bare videre med en advarsel.
+
     print("Starter omfattende sanntidsovervåking (Hormuz, Olje, Vær, Nyheter)...")
     
     # 1. Olje og AIS (Hormuz)
