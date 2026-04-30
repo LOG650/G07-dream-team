@@ -76,9 +76,10 @@ En Random Forest Regressor er trent for å predikere restitusjonstid basert på 
 - **R2:** 0.3356.
 
 ## 6.5 Sanntids Risikointegrasjon (Ny funksjon)
-En av prosjektets mest innovative utvidelser er integrasjonen av **NewsAPI**. Verktøyet henter nå automatisk sanntidsnyheter om globale logistikk-flaskehalser (f.eks. Suez-blokkeringer, ekstremvær eller geopolitiske konflikter).
-- **Metodikk:** Algoritmen analyserer nyhetsstrømmer og genererer en *Live Risk Score*.
-- **Dynamisk respons:** Hvis sanntidsrisikoen for en rute øker (f.eks. Suez), vil beslutningsmodellen automatisk prioritere omruting eller flyfrakt før forsinkelsen faktisk er registrert i interne systemer. Dette flytter verktøyet fra å være reaktivt til å bli proaktivt.
+En av prosjektets mest innovative utvidelser er integrasjonen av **NewsAPI** og **OpenWeatherMap API**. Verktøyet henter nå automatisk sanntidsdata for å identifisere trusler før de påvirker forsyningskjeden:
+- **Global nyhetsovervåking:** Analyserer nyhetsstrømmer for geopolitisk uro, streik og blokkeringer (f.eks. Suez-kanalen).
+- **Meteorologisk overvåking:** Henter faktiske værdata (vindstyrke, ekstremvær) for kritiske logistiske knutepunkter som Panama-kanalen, Shanghai, Rotterdam og Singapore.
+- **Dynamisk respons:** Hvis sanntidsrisikoen øker (f.eks. orkanvarsel eller økt konfliktnivå), vil beslutningsmodellen automatisk prioritere proaktive tiltak som omruting eller flyfrakt. Dette flytter verktøyet fra en historisk analysemodell til et proaktivt styringsverktøy.
 
 # 7.0 Analyse
 ## 7.1 Stresstesting (2.3.2)

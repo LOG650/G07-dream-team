@@ -2,26 +2,26 @@
     "Suez": {
         "score": 0.7,
         "article_count": 47,
-        "last_updated": "2026-04-30 19:02:19"
+        "last_updated": "2026-04-30 19:06:54"
     },
     "Panama": {
         "score": 0.4,
         "article_count": 4,
-        "last_updated": "2026-04-30 19:02:19"
+        "last_updated": "2026-04-30 19:06:54"
     },
     "Cyber": {
         "score": 0.4,
         "article_count": 9,
-        "last_updated": "2026-04-30 19:02:20"
-    },
-    "Weather": {
-        "score": 0.4,
-        "article_count": 3,
-        "last_updated": "2026-04-30 19:02:20"
+        "last_updated": "2026-04-30 19:06:54"
     },
     "Geopolitical": {
         "score": 0.4,
         "article_count": 5,
-        "last_updated": "2026-04-30 19:02:21"
+        "last_updated": "2026-04-30 19:06:55"
+    },
+    "Weather": {
+        "score": 0.18,
+        "info": "Gjennomsnittlig v\u00e6rrisiko i kritiske havner",
+        "last_updated": "2026-04-30 19:06:55"
     }
 }
