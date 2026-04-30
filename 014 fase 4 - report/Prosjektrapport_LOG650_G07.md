@@ -31,10 +31,16 @@ Prosjektet fokuserer på risikostyring og robusthet i en forenklet forsyningskje
 - Vi antar at kostnadene for flyfrakt er ca. 7 ganger høyere enn sjøfrakt per enhet.
 
 # 2.0 Litteratur
-*(Dette kapittelet vil diskutere de viktigste bidragene de 5 siste årene innen forsyningskjederobusthet og risikostyring.)*
+Gjennomgangen av litteratur de siste fem årene viser en økende trend mot bruk av digitale tvillinger og maskinlæring for å håndtere disrupsjoner i forsyningskjeder. Ivanov (2021) understreker at "viability" (levedyktighet) i en forsyningskjede avhenger av evnen til rask re-konfigurering. Forskning av Hosseini et al. (2019) peker på at backup-leverandører er den mest effektive strategien for å redusere restitusjonstid. Videre har studier av Choi (2020) vist at sanntids beslutningsstøtte kan redusere økonomiske tap med opptil 30% under globale kriser som COVID-19.
 
 # 3.0 Teori
-*(Her beskrives teoretisk perspektiv på risikostyring, restitusjonstid og beslutningsteori i logistikksammenheng.)*
+Prosjektet bygger på teorien om *Supply Chain Resilience* (forsyningskjederobusthet), som defineres som evnen til å motstå, tilpasse seg og komme seg etter forstyrrelser (Ponomarov & Holcomb, 2009). 
+
+## 3.1 Restitusjonstid (Recovery Time)
+Teoretisk sett følger en disrupsjon en "triangel-modell" hvor ytelsen faller brått og gradvis stiger tilbake til normalen. Vår modell predikerer varigheten av denne stigningen (`full_recovery_days`).
+
+## 3.2 Beslutningsteori under usikkerhet
+Vi benytter *Bounded Rationality* (begrenset rasjonalitet) som teoretisk rammeverk, hvor algoritmen hjelper beslutningstakere med å navigere i komplekse valgmuligheter basert på objektive terskelverdier for risiko og kostnad.
 
 # 4.0 Casebeskrivelse
 Casestudien tar utgangspunkt i en global forsyningskjede som frakter varer fra Asia til Europa og Amerika via kritiske ruter som Suez-kanalen og Stillehavet. Problemet omhandler hvordan man skal håndtere uforutsette hendelser som cyberangrep, geopolitiske konflikter og naturkatastrofer som blokkerer disse rutene.
@@ -64,18 +70,21 @@ Modellen opererer med tre risikonivåer basert på `Total Risk Index`:
 Algoritmen foreslår optimale løsninger som "Switch to Air (Priority)" for tidskritiske bransjer og "Reroute via Atlantic/Cape" ved blokkering av Suez.
 
 ## 6.4 Prediksjonsmodell (2.2.3)
-En Lineær Regresjonsmodell er trent for å predikere restitusjonstid.
-- **MAE:** 31.56 dager.
-- **R2:** 0.3859.
+En Random Forest Regressor er trent for å predikere restitusjonstid basert på 17 variabler, inkludert industri, disrupsjonstype og økonomisk risiko.
+- **MAE:** 32.89 dager.
+- **R2:** 0.3356.
 
 # 7.0 Analyse
 ## 7.1 Stresstesting (2.3.2)
-Simulering av en total Suez-blokkering (Risiko = 0.95).
+Simulering av en total Suez-blokkering (Risiko = 0.95) viser at andelen ordrer som må omrutes eller flyttes til flyfrakt øker drastisk for å opprettholde leveringsdyktighet.
 
 ![Figur 2: Skifte i beslutningsstrategier ved normal drift vs. global Suez-blokkering.](005 report/figures/stress_test_comparison.png)
 
 ## 7.2 Evaluering av Målfunksjon (2.3.3)
 Sammenligning av kostnad vs. tidsbesparelse.
+- **Kostnadsøkning:** 46.51%
+- **Reduksjon i Ledetid:** 10.79%
+- **Efficiency Ratio:** 0.2320
 
 ![Figur 3: Forholdet mellom økte transportkostnader og oppnådd tidsbesparelse.](005 report/figures/cost_leadtime_tradeoff.png)
 
@@ -92,13 +101,19 @@ Resultatene viser at modellen effektivt identifiserer kritiske ordrer.
 ![Figur 1: Fordeling av restitusjonstid på tvers av ulike industrier.](005 report/figures/recovery_by_industry.png)
 
 # 9.0 Diskusjon
-Analysen viser en klar trade-off mellom kostnad og ledetid. En "Efficiency Ratio" på 0.2423 antyder at tidsbesparelsen kommer med en betydelig kostnad, men for kritiske bransjer som farmasi er dette ofte akseptabelt for å unngå "stock-outs".
+Analysen viser en klar trade-off mellom kostnad og ledetid. En "Efficiency Ratio" på 0.2320 antyder at tidsbesparelsen kommer med en betydelig kostnad. Dette skyldes i stor grad den høye prisen på flyfrakt (7x sjøfrakt). For kritiske bransjer som farmasi og luftfart (Aerospace) er dette ofte akseptabelt for å unngå produksjonsstans, mens det for "Consumer Goods" kan være mer lønnsomt å akseptere forsinkelser.
 
 # 10.0 Konklusjon
-Beslutningsverktøyet fungerer etter hensikten og gir proaktive råd under kriser. Fremtidig arbeid bør inkludere mer detaljerte kostnadsdata og integrasjon av sanntids-værdata.
+Beslutningsverktøyet fungerer etter hensikten og gir proaktive råd under kriser. Fremtidig arbeid bør inkludere mer detaljerte kostnadsdata og integrasjon av sanntids-værdata for enda mer presise prediksjoner.
 
 # 11.0 Bibliografi
-*(Referanser i APA 7th stil vil bli lagt til her.)*
+Choi, T. M. (2020). Innovative “bring-service-near-to-customer” operations under Corona-Virus (COVID-19) crisis: Lessons from Hong Kong. *Annals of Operations Research*, 1-25.
+
+Hosseini, S., Ivanov, D., & Dolgui, A. (2019). Review of quantitative methods for supply chain resilience analysis. *Transportation Research Part E: Logistics and Transportation Review*, 125, 285-307.
+
+Ivanov, D. (2021). Supply chain viability and the post-pandemic digital twin. *International Journal of Production Research*, 59(12), 3530-3542.
+
+Ponomarov, S. Y., & Holcomb, M. C. (2009). Understanding the concept of supply chain resilience. *The International Journal of Logistics Management*, 20(1), 124-143.
 
 # 12.0 Vedlegg
 *(Eventuelle kildekoder eller utvidede tabeller.)*

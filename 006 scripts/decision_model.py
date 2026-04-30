@@ -9,6 +9,7 @@ def run_decision_model():
     RISK_THRESHOLD_HIGH = 0.7
     RISK_THRESHOLD_MODERATE = 0.4
     DELAY_THRESHOLD = 0.1 # 10% delay ratio
+    COST_THRESHOLD_HIGH = 10_000 # Anta at ordrer over 10k USD er prioritert
     
     def classify_risk(row):
         if row['total_risk_index'] >= RISK_THRESHOLD_HIGH:
@@ -22,15 +23,20 @@ def run_decision_model():
     
     # 2. Algoritme for rute-reallokering
     def suggest_reallocation(row):
-        # Trigger: High risk or significant delay
-        if row['risk_level'] == 'High' or row['delay_ratio'] > DELAY_THRESHOLD:
+        # Trigger: High risk, significant delay, or high value order
+        is_high_risk = row['risk_level'] == 'High'
+        is_delayed = row['delay_ratio'] > DELAY_THRESHOLD
+        is_high_value = row['Shipping_Cost_USD'] > COST_THRESHOLD_HIGH
+        
+        if is_high_risk or is_delayed or is_high_value:
             
-            # Spesifikk logikk basert på industri og rute
-            if row['Product_Category'] in ['Pharmaceuticals', 'Semiconductors', 'Consumer Electronics']:
+            # Prioritert logikk for tidskritiske bransjer eller høykost-ordrer
+            critical_industries = ['Pharmaceuticals', 'Semiconductors', 'Consumer Electronics', 'Aerospace']
+            if row['Product_Category'] in critical_industries or is_high_value:
                 if row['Transportation_Mode'] == 'Sea':
                     return 'Switch to Air (Priority)'
             
-            if row['Route_Type'] == 'Suez' and row['risk_level'] == 'High':
+            if row['Route_Type'] == 'Suez' and is_high_risk:
                 return 'Reroute via Atlantic/Cape'
                 
             if row['Transportation_Mode'] == 'Sea':
@@ -42,14 +48,22 @@ def run_decision_model():
 
     df['reallocation_strategy'] = df.apply(suggest_reallocation, axis=1)
     
-    # 3. Beregn potensiell tidsbesparelse (Simulering)
-    # Anta at Air reduserer ledetid med 60% sammenlignet med Sea
-    def estimate_new_lead_time(row):
-        if 'Air' in str(row['reallocation_strategy']):
-            return row['Scheduled_Lead_Time_Days'] * 0.4
-        return row['Scheduled_Lead_Time_Days']
+    # 3. Kostnad og tidsbesparelse
+    def calculate_impact(row):
+        strategy = str(row['reallocation_strategy'])
+        new_cost = row['Shipping_Cost_USD']
+        new_lead_time = row['Scheduled_Lead_Time_Days']
+        
+        if 'Switch to Air' in strategy:
+            new_cost *= 7.0
+            new_lead_time *= 0.4 # 60% reduksjon
+        elif 'Reroute' in strategy:
+            new_cost *= 1.3
+            new_lead_time *= 1.1 # 10% økning pga lengre rute
+            
+        return pd.Series([new_cost, new_lead_time])
 
-    df['estimated_new_lead_time'] = df.apply(estimate_new_lead_time, axis=1)
+    df[['new_shipping_cost_usd', 'estimated_new_lead_time']] = df.apply(calculate_impact, axis=1)
     
     # Lagre resultater
     output_path = '004 data/decision_model_results.csv'
