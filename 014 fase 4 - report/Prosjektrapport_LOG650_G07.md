@@ -70,24 +70,26 @@ Modellen opererer med tre risikonivåer basert på `Total Risk Index`:
 ## 6.2 Algoritme for Rute-reallokering
 Algoritmen foreslår optimale løsninger som "Switch to Air (Priority)" for tidskritiske bransjer og "Reroute via Atlantic/Cape" ved blokkering av Suez.
 
-## 6.3 Prediksjonsmodell (2.2.3)
+## 6.4 Prediksjonsmodell (2.2.3)
 En Random Forest Regressor er trent for å predikere restitusjonstid basert på 17 variabler.
 - **MAE:** 32.89 dager.
 - **R2:** 0.3356.
 
+## 6.5 Sanntids Risikointegrasjon (Ny funksjon)
+En av prosjektets mest innovative utvidelser er integrasjonen av **NewsAPI**. Verktøyet henter nå automatisk sanntidsnyheter om globale logistikk-flaskehalser (f.eks. Suez-blokkeringer, ekstremvær eller geopolitiske konflikter).
+- **Metodikk:** Algoritmen analyserer nyhetsstrømmer og genererer en *Live Risk Score*.
+- **Dynamisk respons:** Hvis sanntidsrisikoen for en rute øker (f.eks. Suez), vil beslutningsmodellen automatisk prioritere omruting eller flyfrakt før forsinkelsen faktisk er registrert i interne systemer. Dette flytter verktøyet fra å være reaktivt til å bli proaktivt.
+
 # 7.0 Analyse
 ## 7.1 Stresstesting (2.3.2)
-Simulering av en total Suez-blokkering (Risiko = 0.95) viser at andelen ordrer som må omrutes øker drastisk for å opprettholde leveringsdyktighet.
-
-![Figur 2: Skifte i beslutningsstrategier ved normal drift vs. global Suez-blokkering.](005 report/figures/stress_test_comparison.png)
+...
 
 ## 7.2 Evaluering av Målfunksjon (2.3.3)
-Sammenligning av kostnad vs. tidsbesparelse:
-- **Kostnadsøkning:** 46.51%
-- **Reduksjon i Ledetid:** 10.79%
-- **Efficiency Ratio:** 0.2320
-
-![Figur 3: Forholdet mellom økte transportkostnader og oppnådd tidsbesparelse.](005 report/figures/cost_leadtime_tradeoff.png)
+Med sanntidsdata integrert (per 30. april 2026), viser modellen en mer forsiktig tilnærming med økt fokus på risikoreduksjon:
+- **Kostnadsøkning:** 61.09%
+- **Reduksjon i Ledetid:** 12.09%
+- **Efficiency Ratio:** 0.1979
+- **Strategiendring:** Antallet foreslåtte omrutinger via Kapp det gode håp økte betydelig (fra 374 til 2471) som følge av sanntidssignaler om spenninger i Suez-regionen.
 
 # 8.0 Resultat
 Resultatene viser at modellen effektivt identifiserer kritiske ordrer.

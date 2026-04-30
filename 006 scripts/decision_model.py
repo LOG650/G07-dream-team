@@ -1,10 +1,19 @@
 import pandas as pd
 import numpy as np
+import os
+import json
 
 def run_decision_model():
     # Load enriched data
     df = pd.read_csv('004 data/enriched_disruption_data.csv')
     
+    # Last inn sanntidssignaler hvis de eksisterer
+    live_risk = {}
+    if os.path.exists('004 data/live_risk_signals.json'):
+        with open('004 data/live_risk_signals.json', 'r') as f:
+            live_risk = json.load(f)
+            print("Sanntidssignaler lastet inn.")
+
     # 1. Definer terskelverdier (Thresholds)
     RISK_THRESHOLD_HIGH = 0.7
     RISK_THRESHOLD_MODERATE = 0.4
@@ -12,9 +21,23 @@ def run_decision_model():
     COST_THRESHOLD_HIGH = 10_000 # Anta at ordrer over 10k USD er prioritert
     
     def classify_risk(row):
-        if row['total_risk_index'] >= RISK_THRESHOLD_HIGH:
+        base_risk = row['total_risk_index']
+        
+        # Sjekk om ruten eller hendelsen har høy sanntidsrisiko
+        route = row['Route_Type']
+        event = row['Disruption_Event']
+        
+        # Suez-spesifikk sanntidsoverstyring
+        if route == 'Suez' and 'Suez' in live_risk:
+            base_risk = max(base_risk, live_risk['Suez']['score'])
+        
+        # Geopolitisk sanntidsoverstyring
+        if 'Geopolitical' in str(event) and 'Geopolitical' in live_risk:
+            base_risk = max(base_risk, live_risk['Geopolitical']['score'])
+            
+        if base_risk >= RISK_THRESHOLD_HIGH:
             return 'High'
-        elif row['total_risk_index'] >= RISK_THRESHOLD_MODERATE:
+        elif base_risk >= RISK_THRESHOLD_MODERATE:
             return 'Moderate'
         else:
             return 'Low'
