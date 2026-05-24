@@ -1,0 +1,4 @@
+# Ignore large model files
+006 scripts/*.pkl
+# Ignore temporary Word files
+**/~$*.docx
