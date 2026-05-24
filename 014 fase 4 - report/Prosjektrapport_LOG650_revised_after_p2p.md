@@ -60,9 +60,9 @@ restitusjonstid?
 ## 1.2 Forskningsspørsmål (Delproblemer)
 
 For å besvare hovedproblemstillingen har vi formulert følgende delproblemer:
-1. Hvilke risikofaktorer (f.eks. disrupsjonstype, geografi, industri) har størst statistisk påvirkning på forsyningskjedens restitusjonstid?
-2. Hvordan kan en Random Forest-modell brukes til å predikere restitusjonstid basert på historiske og sanntidsbaserte risikosignaler?
-3. Under hvilke spesifikke betingelser (risikonivå, kostnadstoleranse, tidsnød) bør modellen anbefale alternative transportruter som flyfrakt eller omruting via Atlantic/Cape?
+1. I hvilken grad kan faktorer som disrupsjonstype, geografisk lokasjon og industrisektor fungere som pålitelige indikatorer for å predikere restitusjonstid i en global forsyningskjede?
+2. Hvordan presterer en Random Forest-algoritme sammenlignet med tradisjonelle gjennomsnittsberegninger når det gjelder å estimere restitusjonstid under høy usikkerhet?
+3. Hva er de kritiske terskelverdiene for "Total Risk Index" og kostnad-nytte-forholdet som rettferdiggjør overgang til dyrere logistikkalternativer som flyfrakt?
 
 ## 1.3 Avgrensinger
 
@@ -77,11 +77,9 @@ distribusjonspunkter, med fokus på eksterne risikohendelser.
 Vi antar at historiske data for restitusjonstid er representative for
 fremtidige hendelser.
 
-Vi antar at flyfrakt i gjennomsnitt reduserer ledetiden med 60%
-sammenlignet med sjøfrakt.
+Vi antar at flyfrakt i gjennomsnitt reduserer ledetiden med 60% sammenlignet med sjøfrakt. Denne antagelsen er basert på generelle logistiske benchmarks for interkontinentale ruter (f.eks. fra World Bank Logistics Performance Index).
 
-Vi antar at kostnadene for flyfrakt er ca. 7 ganger høyere enn sjøfrakt
-per enhet.
+Vi antar at kostnadene for flyfrakt er ca. 7 ganger høyere enn sjøfrakt per enhet. Gitt den høye usikkerheten i transportrater under kriser, anerkjenner vi behovet for sensitivitetsanalyse av disse parametrene for å sikre modellens pålitelighet i ulike markedssituasjoner.
 
 # 2.0 Litteratur
 
@@ -91,6 +89,8 @@ i forsyningskjeder. Ivanov (2021) understreker at "viability"
 (levedyktighet) i en forsyningskjede avhenger av evnen til rask
 re-konfigurering og adaptiv planlegging. Vårt prosjekt bygger videre på dette ved å implementere en sanntidsmodul som muliggjør nettopp slik rask re-konfigurering.
 
+Sentralt i moderne forskning står også teorien om "The Ripple Effect" (Ivanov et al., 2014), som beskriver hvordan en lokal forstyrrelse kan spre seg og skape systemiske feil i hele kjeden. Mens mye av den eksisterende litteraturen fokuserer på statiske risikoanalyser, bidrar dette prosjektet med en dynamisk tilnærming som kobler sanntids risikosignaler direkte til operative beslutningsregler. Dette bygger bro mellom teoretisk robusthetsanalyse og praktisk krisehåndtering.
+
 Forskning av Hosseini et al. (2019) peker på at
 backup-leverandører er den mest effektive strategien for å redusere
 restitusjonstid, noe som understøttes av våre simuleringsresultater i kapittel 9.0. Videre har studier av Choi (2020) vist at sanntids
@@ -99,12 +99,13 @@ globale kriser. Dette prosjektet adresserer det praktiske gapet ved å kombinere
 
 ## 2.1 Begrunnelse for modellvalg
 
-Valget av **Random Forest Regressor** som hovedmodell er basert på flere faktorer:
+Valget av **Random Forest Regressor** som hovedmodell fremfor enklere modeller som lineær regresjon eller mer komplekse metoder som Deep Learning er strategisk:
 1. **Ikke-lineære sammenhenger:** Restitusjonstid påvirkes ofte av komplekse interaksjoner mellom disrupsjonstype, geografi og industri som enkle lineære modeller har vanskelig for å fange opp.
-2. **Robusthet:** Random Forest er mindre følsom for ekstremverdier (outliers) og støy i datasettet sammenlignet med alternative algoritmer som nevrale nettverk.
-3. **Feature Importance:** Algoritmen gir innsikt i hvilke variabler som er viktigst for prediksjonen, noe som er kritisk for å gi forklarlig beslutningsstøtte (XAI).
+2. **Datatilgjengelighet og kompleksitet:** Deep Learning krever ofte ekstremt store og homogene datamengder for å konvergere. Random Forest er langt mer effektiv på tabulære data med moderate mengder støy, noe som er typisk for logistiske datasett.
+3. **Robusthet:** Random Forest er en ensemble-metode som er mindre følsom for ekstremverdier (outliers) og "overfitting" sammenlignet med beslutningstrær eller nevrale nettverk.
+4. **Feature Importance (Forklarbarhet):** Algoritmen gir innsikt i hvilke variabler som er viktigst for prediksjonen. I en logistisk kontekst er det avgjørende at en beslutningstaker forstår *hvorfor* verktøyet varsler høy risiko (XAI - Explainable AI).
 
-**Regelbasert beslutningslogikk** er valgt for å komplementere maskinlæringsmodellen. Dette sikrer at verktøyet kan handle umiddelbart på terskelverdier (thresholds) for risiko, noe som gir den nødvendige hastigheten i en krisesituasjon der "Bounded Rationality" ofte begrenser menneskelige beslutningstakere.
+**Regelbasert beslutningslogikk** (If-Then-Else) er valgt for å komplementere maskinlæringsmodellen. Mens Random Forest predikerer *hva* som vil skje (restitusjonstid), sørger den regelbaserte logikken for *hvordan* man skal reagere (beslutningsstøtte). Dette sikrer deterministiske og forutsigbare handlinger på kritiske terskelverdier, noe som reduserer den kognitive belastningen for beslutningstakere i en krisesituasjon preget av "Bounded Rationality".
 
 # 3.0 Teori
 
@@ -165,9 +166,9 @@ Datasettet består av 100 000 observasjoner av logistiske hendelser.
 -   **Feature Engineering:** Nye variabler er konstruert i `feature_engineering.py` for å styrke modellens prediksjonskraft:
     -   **Total Risk Index:** Beregnes som en vektet sum: `(Geopolitisk risiko * 0.6) + (Væralvorlighet * 0.04)`. Vektingen reflekterer at geopolitisk risiko ofte har en mer langvarig og systemisk påvirkning på rutevalg i vårt case.
     -   **Recovery Speed:** Beregnes som `Antall dager for full restitusjon / Disrupsjonsalvorlighet`. Dette gir et mål på hvor effektivt en forsyningskjede henter seg inn sett i forhold til sjokkets styrke.
--   **Sammenslåing (Merging):** Siden datasettene mangler en felles unik identifikator, ble de slått sammen statistisk ved å mappe produktkategorier til industrisektorer. Dette muliggjør en analyse av hvordan generelle disrupsjonsmønstre i en industri påvirker spesifikke restitusjonstider.
--   **Separering:** Data er delt i et treningssett (80%) og et testsett
-    (20%).
+-   **Sammenslåing (Merging):** Siden datasettene fra Kaggle manglet en felles unik identifikator, ble det utviklet en mapping-logikk i Python som koblet produktkategorier (fra disrupsjonsdata) til industrisektorer (fra restitusjonsdata). For eksempel ble "Electronics" mappet til "Technology"-sektoren, og "Pharmaceuticals" til "Healthcare". Denne statistiske sammenslåingen gjør det mulig å analysere hvordan generelle risikohendelser i en spesifikk industri direkte påvirker restitusjonstiden for relaterte produktgrupper.
+-   **Total Risk Index (Detaljert):** Beregnes som en vektet sum: `(Geopolitisk risiko * 0.6) + (Væralvorlighet * 0.4)`. Vektingen er valgt fordi geopolitiske konflikter i vårt case (Suez/Hormuz) historisk sett gir mer langvarige blokkeringer enn isolerte værhendelser. Denne indeksen fungerer som den primære "triggeren" for modellens beslutningslogikk.
+-   **Separering:** Data er delt i et treningssett (80%) og et testsett (20%) for å sikre en objektiv evaluering av modellens generaliseringsevne.
 
 # 6.0 Modellering
 
@@ -181,9 +182,9 @@ Modellen opererer med tre risikonivåer basert på Total Risk Index:
 
 ## 6.2 Antagelser og overførbarhet
 
-Modellen bygger på operative antagelser om at flyfrakt reduserer ledetid med 60% til en 7x høyere kostnad enn sjøfrakt. Disse verdiene er hentet fra generelle logistiske benchmarks (f.eks. World Bank Logistics Performance Index), men bør i en reell implementering verifiseres gjennom en sensitivitetsanalyse tilpasset spesifikke kontrakter.
+Modellen bygger på operative antagelser om at flyfrakt reduserer ledetid med 60% til en 7x høyere kostnad enn sjøfrakt. Disse verdiene er hentet fra generelle logistiske benchmarks og rapporter fra organisasjoner som World Bank og IATA. Valget av disse parameterne er gjort for å illustrere de dramatiske avveiningene (trade-offs) logistikkansvarlige står overfor under en krise. 
 
-Siden rapporten delvis benytter syntetiske og simulerte data, er det viktig å understreke at de nøyaktige tallverdiene (som MAE og R2) er mest relevante for å illustrere *potensialet* i metoden. Overførbarhet til reelle forsyningskjeder krever integrasjon med virksomhetsspesifikke ERP-data og mer presise kostnadsparametere.
+Siden rapporten delvis benytter syntetiske og simulerte data, er det viktig å understreke at de nøyaktige tallverdiene (som MAE og R2) er mest relevante for å illustrere *potensialet* i metoden. En reell implementering krever en omfattende sensitivitetsanalyse for å avdekke hvordan modellens anbefalinger endres dersom kostnadsdifferansen mellom fly og sjø varierer (f.eks. ved ekstreme rater på sjøfrakt som sett under COVID-19). Overførbarhet til reelle forsyningskjeder krever integrasjon med virksomhetsspesifikke ERP-data og mer presise kostnadsparametere.
 
 ## 6.3 Algoritme for Rute-reallokering
 
@@ -266,7 +267,13 @@ Modellen har likevel begrensninger. Den er basert på historiske og delvis simul
 
 # 10.0 Konklusjon
 
-Beslutningsverktøyet fungerer etter hensikten og gir proaktive råd under kriser. Ved å kombinere risikoanalyse med konkrete tiltak kan virksomheter redusere konsekvensene av forstyrrelser. Fremtidig arbeid bør inkludere mer detaljerte kostnadsdata, flere nivåer i forsyningskjeden og dypere integrasjon av sanntids-værdata for enda mer presise prediksjoner.
+Dette prosjektet har demonstrert utviklingen av et datadrevet beslutningsverktøy for risikostyring i globale forsyningskjeder. Basert på våre forskningsspørsmål kan vi konkludere med følgende:
+
+1. **Prediktive indikatorer:** Analysen bekrefter at disrupsjonstype og geografisk lokasjon er de sterkeste indikatorene for restitusjonstid, men at industrisektor også spiller en modererende rolle. 
+2. **Modellprestasjon:** Random Forest-algoritmen gir mer nyanserte estimater enn tradisjonelle gjennomsnitt, men en R2 på 0.3356 understreker at betydelig usikkerhet gjenstår i komplekse globale systemer.
+3. **Beslutningsterskler:** Vi har identifisert at en "Total Risk Index" over 0.7 fungerer som et effektivt beslutningspunkt for proaktiv omruting, men at den økonomiske bærekraften avhenger kritisk av varens verdi og tidsnød.
+
+Oppsummert fungerer verktøyet som en effektiv indikator og støtte under krisehåndtering, men bør suppleres med menneskelig ekspertise. Fremtidig arbeid bør fokusere på å inkludere mer detaljerte kostnadsdata og dypere integrasjon av sanntids-værdata for enda mer presise prediksjoner.
 
 # 11.0 Bibliografi
 
