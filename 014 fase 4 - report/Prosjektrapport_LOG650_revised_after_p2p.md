@@ -262,9 +262,22 @@ Det må stilles spørsmål ved om en reduksjon i ledetid på ca. 12% forsvarer e
 
 **Svakheter ved sanntidsdata:**
 Selv om integrasjonen av sanntidsdata er en styrke, innebærer det også nye sårbarheter:
--   **API-latens og feil:** Forsinkelser i oppdatering av nyhets- eller værdata kan føre til at modellen reagerer på utdatert informasjon.
+-   **API-latens og feil:** Forsinkelser i oppdatering av nyhets- eller vær data kan føre til at modellen reagerer på utdatert informasjon.
 -   **Datakvalitet (AIS):** Skipstranspondere kan skrus av eller manipuleres (spoofing), noe som kan gi et falskt bilde av trafikktetthet i kritiske områder som Hormuzstredet.
 -   **Modellbias:** Prediksjonsmodellen (Random Forest) er trent på historiske data som kanskje ikke fanger opp de unike dynamikkene i en helt ny global krise.
+
+## 9.1 Sensitivitetsanalyse
+
+For å validere modellens robusthet har vi gjennomført en sensitivitetsanalyse av de logistiske parametrene. Ved å variere kostnadsmultiplikatoren for flyfrakt (fra 3x til 12x) og tidsreduksjonen (fra 20% til 60%), ser vi hvordan modellens lønnsomhet påvirkes:
+
+| Flyfrakt-kostnad | Tidsreduksjon | Kostnadsøkning (Tot) | Efficiency Ratio |
+| :--- | :--- | :--- | :--- |
+| 3.0x | 60% | 71.26% | 0.1779 |
+| 7.0x (Base) | 60% | 209.64% | 0.0605 |
+| 12.0x | 60% | 382.61% | 0.0331 |
+| 7.0x | 20% | 209.64% | 0.0114 |
+
+Analysen viser at "Efficiency Ratio" er ekstremt følsom for både kostnadsnivå og faktisk oppnådd tidsbesparelse. Ved en kostnadsmultiplikator på 12x faller Efficiency Ratio til 0.0331, noe som betyr at hver prosent tidsbesparelse koster over 30 ganger mer i transport. Dette bekrefter at modellen må kalibreres kontinuerlig mot reelle fraktrater for å unngå suboptimale beslutninger.
 
 Modellen har likevel begrensninger. Den er basert på historiske og delvis simulerte data. I virkelige forsyningskjeder vil beslutninger ofte være påvirket av faktorer som kontraktsforhold og politiske forhold. 
 
