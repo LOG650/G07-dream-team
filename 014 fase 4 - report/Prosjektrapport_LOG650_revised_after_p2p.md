@@ -23,7 +23,7 @@ effekten av backup-leverandører og alvorlighetsgraden av disrupsjoner.
 Modelleringen viser at proaktive beslutninger kan redusere ledetiden
 betydelig, selv om det medfører økte transportkostnader. En avansert
 sanntidsmodul integrerer nå vær, nyheter, skipstrafikk (AIS) og
-oljepriser for å gi dynamiske beslutningsstøtte.
+oljepriser for å gi dynamisk beslutningsstøtte.
 
 **Abstract**
 
@@ -64,7 +64,11 @@ For å besvare hovedproblemstillingen har vi formulert følgende delproblemer:
 2. Hvordan presterer en Random Forest-algoritme sammenlignet med tradisjonelle gjennomsnittsberegninger når det gjelder å estimere restitusjonstid under høy usikkerhet?
 3. Hva er de kritiske terskelverdiene for "Total Risk Index" og kostnad-nytte-forholdet som rettferdiggjør overgang til dyrere logistikkalternativer som flyfrakt?
 
-## 1.3 Avgrensinger
+## 1.3 Prosjektets mål
+
+Det overordnede målet med dette prosjektet er å utvikle en funksjonell modell for beslutningsstøtte som kan redusere restitusjonstiden i en forsyningskjede gjennom proaktive tiltak. Ved å kombinere maskinlæring og regelbasert logikk undersøker vi hvordan virksomheter kan reagere raskere og mer strukturert på komplekse forstyrrelser.
+
+## 1.4 Avgrensinger
 
 Prosjektet fokuserer på risikostyring og robusthet i en forenklet
 forsyningskjede. Analysen baseres på åpne datasett som beskriver
@@ -283,11 +287,17 @@ Gedipudi, L. (2026). Supply Chain Disruption and Recovery Dataset [Data set]. Ka
 
 Hosseini, S., Ivanov, D., & Dolgui, A. (2019). Review of quantitative methods for supply chain resilience analysis. Transportation Research Part E: Logistics and Transportation Review, 125, 285-307.
 
+IATA. (2024). Air Cargo Market Analysis: Benchmarking Air vs. Sea Freight Costs and Lead Times.
+
 Ivanov, D. (2021). Supply chain viability and the post-pandemic digital twin. International Journal of Production Research, 59(12), 3530-3542.
+
+Ivanov, D., Sokolov, B., & Dolgui, A. (2014). The Ripple effect in supply chains: trade-off ‘efficiency-flexibility-resilience’ in disruption management. International Journal of Production Research, 52(7), 2154-2172.
 
 Ponomarov, S. Y., & Holcomb, M. C. (2009). Understanding the concept of supply chain resilience. The International Journal of Logistics Management, 20(1), 124-143.
 
 Uskono, B. M. (2026). Global Supply Chain Disruption & Resilience [Data set]. Kaggle. https://doi.org/10.34740/KAGGLE/DSV/14387044
+
+World Bank. (2023). Logistics Performance Index (LPI) 2023: Connecting to Compete. https://lpi.worldbank.org/
 
 # 12.0 Vedlegg
 
