@@ -7,7 +7,7 @@ Hajar Al-Mohannah, Sanosh Senthilkumar
 
 Totalt antall sider inkludert forsiden: 17
 
-Molde, 24. mai 2026
+Molde, 1. juni 2026
 
 ![](media/image2.jpeg){width="2.0in" height="1.2430555555555556in"}
 
@@ -168,10 +168,9 @@ Datasettet består av 100 000 observasjoner av logistiske hendelser.
 -   **Cleaning:** Data er renset for manglende verdier og inkonsistente
     rutenavn via `clean_data.py`.
 -   **Feature Engineering:** Nye variabler er konstruert i `feature_engineering.py` for å styrke modellens prediksjonskraft:
-    -   **Total Risk Index:** Beregnes som en vektet sum: `(Geopolitisk risiko * 0.6) + (Væralvorlighet * 0.04)`. Vektingen reflekterer at geopolitisk risiko ofte har en mer langvarig og systemisk påvirkning på rutevalg i vårt case.
+    -   **Total Risk Index:** Beregnes som en vektet sum: `(Geopolitisk risiko * 0.6) + (Væralvorlighet * 0.04)`. Vektingen reflekterer at geopolitisk risiko (skalert 0-1) veier tyngre enn værhendelser (skalert 0-10) i vårt case. Ved å bruke 0.04 som vekt for vær, sikrer vi at begge faktorene bidrar balansert til en samlet indeks mellom 0 og 1.
     -   **Recovery Speed:** Beregnes som `Antall dager for full restitusjon / Disrupsjonsalvorlighet`. Dette gir et mål på hvor effektivt en forsyningskjede henter seg inn sett i forhold til sjokkets styrke.
 -   **Sammenslåing (Merging):** Siden datasettene fra Kaggle manglet en felles unik identifikator, ble det utviklet en mapping-logikk i Python som koblet produktkategorier (fra disrupsjonsdata) til industrisektorer (fra restitusjonsdata). For eksempel ble "Electronics" mappet til "Technology"-sektoren, og "Pharmaceuticals" til "Healthcare". Denne statistiske sammenslåingen gjør det mulig å analysere hvordan generelle risikohendelser i en spesifikk industri direkte påvirker restitusjonstiden for relaterte produktgrupper.
--   **Total Risk Index (Detaljert):** Beregnes som en vektet sum: `(Geopolitisk risiko * 0.6) + (Væralvorlighet * 0.4)`. Vektingen er valgt fordi geopolitiske konflikter i vårt case (Suez/Hormuz) historisk sett gir mer langvarige blokkeringer enn isolerte værhendelser. Denne indeksen fungerer som den primære "triggeren" for modellens beslutningslogikk.
 -   **Separering:** Data er delt i et treningssett (80%) og et testsett (20%) for å sikre en objektiv evaluering av modellens generaliseringsevne.
 
 # 6.0 Modellering
@@ -244,8 +243,8 @@ Resultatene viser at modellen effektivt identifiserer kritiske ordrer og reagere
 | Strategi | Andel (%) |
 | :--- | :--- |
 | Maintain Current Route | 43.3% |
-| Reroute via Atlantic/Cape | 24.7% |
-| Switch to Air (Priority) | 13.1% |
+| Reroute via Atlantic/Cape | 19.2% |
+| Switch to Air (Priority) | 18.6% |
 | Manual Review Required | 10.4% |
 | Switch to Air (Express) | 8.5% |
 
