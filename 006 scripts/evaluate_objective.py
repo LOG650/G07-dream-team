@@ -29,36 +29,36 @@ def evaluate_objective_function():
 
     df['new_shipping_cost_usd'] = df.apply(calculate_new_cost, axis=1)
     
-    # 2. Sammenlign totaler
-    total_cost_base = df['Shipping_Cost_USD'].sum()
-    total_cost_model = df['new_shipping_cost_usd'].sum()
+    # 2. Sammenlign gjennomsnitt (mer intuitivt enn sum for 10,000 rader)
+    avg_cost_base = df['Shipping_Cost_USD'].mean()
+    avg_cost_model = df['new_shipping_cost_usd'].mean()
     
-    total_days_base = df['Scheduled_Lead_Time_Days'].sum()
-    total_days_model = df['estimated_new_lead_time'].sum()
+    avg_days_base = df['Scheduled_Lead_Time_Days'].mean()
+    avg_days_model = df['estimated_new_lead_time'].mean()
     
     # 3. Beregn KPIer
-    cost_increase_pct = ((total_cost_model - total_cost_base) / total_cost_base) * 100
-    lead_time_reduction_pct = ((total_days_base - total_days_model) / total_days_base) * 100
+    cost_increase_pct = ((avg_cost_model - avg_cost_base) / avg_cost_base) * 100
+    lead_time_reduction_pct = ((avg_days_base - avg_days_model) / avg_days_base) * 100
     
     # "Efficiency Ratio" - Hvor mange % ledetid sparer vi per % kostnadsøkning
     efficiency_ratio = lead_time_reduction_pct / cost_increase_pct if cost_increase_pct > 0 else 0
 
     print("EVALUERING AV MÅLFUNKSJON (2.3.3)")
     print("-" * 50)
-    print(f"Total Transportkostnad (Base):  ${total_cost_base:,.2f}")
-    print(f"Total Transportkostnad (Modell): ${total_cost_model:,.2f}")
+    print(f"Gj.snitt Transportkostnad (Base):  ${avg_cost_base:,.2f}")
+    print(f"Gj.snitt Transportkostnad (Modell): ${avg_cost_model:,.2f}")
     print(f"Kostnadsøkning:                  {cost_increase_pct:.2f}%")
     print("-" * 50)
-    print(f"Total Ledetid (Base):            {total_days_base:,.0f} dager")
-    print(f"Total Ledetid (Modell):          {total_days_model:,.0f} dager")
+    print(f"Gj.snitt Ledetid (Base):            {avg_days_base:.2f} dager")
+    print(f"Gj.snitt Ledetid (Modell):          {avg_days_model:.2f} dager")
     print(f"Reduksjon i Ledetid:             {lead_time_reduction_pct:.2f}%")
     print("-" * 50)
     print(f"Efficiency Ratio:                {efficiency_ratio:.4f}")
     
     # Lagre resultater for rapporten
     results_df = pd.DataFrame({
-        'Metric': ['Total Cost Base', 'Total Cost Model', 'Cost Increase %', 'Total Days Base', 'Total Days Model', 'Lead Time Reduction %', 'Efficiency Ratio'],
-        'Value': [total_cost_base, total_cost_model, cost_increase_pct, total_days_base, total_days_model, lead_time_reduction_pct, efficiency_ratio]
+        'Metric': ['Average Cost Base', 'Average Cost Model', 'Cost Increase %', 'Average Days Base', 'Average Days Model', 'Lead Time Reduction %', 'Efficiency Ratio'],
+        'Value': [avg_cost_base, avg_cost_model, cost_increase_pct, avg_days_base, avg_days_model, lead_time_reduction_pct, efficiency_ratio]
     })
     results_df.to_csv('004 data/objective_evaluation.csv', index=False)
     print("\nEvaluering ferdig. Lagret i 004 data/objective_evaluation.csv")
